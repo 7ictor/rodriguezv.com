@@ -13,7 +13,7 @@
   const table = (entries) => Object.assign(Object.create(null), entries);
 
   const MAIL = 'vic[at]outlook[dot]com';
-  const VERSION = 'victor 2026.10'; // year.month of the last publish
+  const VERSION = 'victor dev'; // stamped yyyy.mm.nn by the deploy workflow
   const TRY_HELP = "try 'victor --help' for more information.";
 
   const LINKS = table({

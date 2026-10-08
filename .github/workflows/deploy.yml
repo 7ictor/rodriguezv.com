@@ -1,0 +1,45 @@
+# Every push to main: stamp the version into prompt.js and publish the site.
+# The version is yyyy.mm.nn, where nn counts the commits made that month,
+# so the same commit always gets the same number and nothing is committed back.
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the whole history, to count this month's commits
+
+      - name: stamp the version
+        run: |
+          month=$(date -u +%Y-%m)
+          build=$(git rev-list --count --since="${month}-01T00:00:00Z" HEAD)
+          version="${month//-/.}.$(printf '%02d' "$build")"
+          sed -i "s/'victor dev'/'victor $version'/" prompt.js
+          grep -q "'victor $version'" prompt.js
+          echo "victor $version" >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
