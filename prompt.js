@@ -20,7 +20,9 @@
     github: 'https://github.com/7ictor',
     linkedin: 'https://www.linkedin.com/in/vicrodriguezm',
     twitter: 'https://x.com/vicrod',
+    stats: 'https://vicrod.goatcounter.com',
   });
+  const COUNTER = `${LINKS.stats}/counter//.json`; // cached up to four hours
 
   const FLAGS = table({
     '--mobile': 'mobile: react native from js down to swift and kotlin, fast at country scale.',
@@ -48,6 +50,8 @@
     'github    open it in a new tab; also linkedin, twitter',
     'mail      my email address',
     'theme     light, dark or system',
+    'who       how many visitors so far',
+    'stats     their dashboard, in a new tab',
     'history   what you typed before',
     'clear     clean the screen',
     'exit      close the prompt',
@@ -129,6 +133,7 @@
     linkedin: () => visit('linkedin'),
     twitter: () => visit('twitter'),
     x: () => visit('twitter'),
+    stats: () => visit('stats'),
     mail: () => MAIL,
     email: () => MAIL,
 
@@ -143,6 +148,11 @@
       theme.set(want);
     },
 
+    who: () =>
+      fetch(COUNTER)
+        .then((res) => res.json())
+        .then((data) => `${data.count} visitors since 2026.10`)
+        .catch(() => 'who: the counter is not answering.'),
     whoami: () => 'visitor',
     sudo: () => 'visitor is not in the sudoers file.  this incident will be reported.',
     date: () => new Date().toString().toLowerCase(),
@@ -169,7 +179,8 @@
     const command = commands[name.toLowerCase()];
     if (!command) return say(`sh: ${name}: command not found\ntry 'help'.`);
     const result = command(args);
-    if (result) say(result);
+    if (result?.then) result.then(say).then(() => input.scrollIntoView({ block: 'nearest' }));
+    else if (result) say(result);
   };
 
   // a block cursor drawn where the real caret is; monospace, so column n sits at n × 1ch

@@ -31,6 +31,11 @@ python3 -m http.server
   The two `theme-color` metas in each page repeat the two backgrounds.
 - **Commands**: add a function to `commands` in `prompt.js`. What `victor`
   prints is in `FLAGS` and `VICTOR_HELP`.
+- **Visitors**: GoatCounter, one script tag in each page. The dashboard is
+  public at vicrod.goatcounter.com; `stats` in the prompt opens it and `who`
+  reads its counter. The host sits in `LINKS.stats` in `prompt.js` and in the
+  two script tags. To leave your own visits out, run
+  `localStorage.skipgc = 't'` once in the browser console.
 - **Without the scripts**: drop either `<script>` tag. The page still follows
   the system theme and simply has no switch or no prompt.
 
