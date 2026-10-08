@@ -1,0 +1,305 @@
+/* rodriguezv.com: a man page. 80 columns, section names at column 0, bodies indented 7. */
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("fonts/IBMPlexMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("fonts/IBMPlexMono-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+/* each colour is a pair: light-dark(paper, terminal) */
+:root {
+  color-scheme: light dark;
+  --ground:     light-dark(#f3f6f4, #0d1210);
+  --text:       light-dark(#2b3530, #d5ddd8);
+  --bright:     light-dark(#0d1210, #f3f7f4);
+  --dim:        light-dark(#5b6a62, #8fa097);
+  --link:       light-dark(#0b744a, #5cc48f);
+  --link-hover: light-dark(#075636, #7fd3a6);
+  --line: 1.6em;
+  --indent: min(7ch, 8vw);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--ground);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  font: 400 16px/1.6 "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-variant-ligatures: none;
+}
+
+h1, h2, p, dl, dt, dd, ul, pre {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+::selection {
+  background: var(--link);
+  color: var(--ground);
+}
+
+a {
+  color: var(--link);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--link-hover);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.page {
+  position: relative;
+  max-width: calc(80ch + 48px);
+  margin: 0 auto;
+  padding: 56px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--line);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--line);
+}
+
+h2,
+dt {
+  font-weight: 600;
+  color: var(--bright);
+}
+
+/* section names in capitals, everything under them in lowercase; the prompt keeps what you type */
+section {
+  text-transform: lowercase;
+}
+
+h2 {
+  text-transform: uppercase;
+}
+
+section > :not(h2) {
+  padding-left: var(--indent);
+}
+
+section > p + p {
+  margin-top: var(--line);
+}
+
+.rows > * {
+  display: grid;
+  grid-template-columns: 9ch minmax(0, 1fr);
+  column-gap: 2ch;
+}
+
+.rows dd {
+  overflow-wrap: anywhere;
+}
+
+.cv > * {
+  grid-template-columns: 9ch 12ch minmax(0, 1fr);
+}
+
+.cv .when {
+  color: var(--dim);
+}
+
+.cv .who {
+  color: var(--bright);
+}
+
+@media (max-width: 40em) {
+  .cv > * {
+    grid-template-columns: 9ch minmax(0, 1fr);
+  }
+
+  .cv .what {
+    grid-column: 2;
+  }
+}
+
+/* the theme switch: a sun on a light page, a moon on a dark one */
+.switch {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  margin: 0;
+  padding: 11px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--dim);
+  cursor: pointer;
+}
+
+.switch:hover {
+  color: var(--text);
+}
+
+.switch:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: -5px;
+}
+
+.switch svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.switch .moon,
+.switch[aria-checked="true"] .sun {
+  display: none;
+}
+
+.switch[aria-checked="true"] .moon {
+  display: block;
+}
+
+/* the prompt */
+.tty pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.ps1 {
+  color: var(--dim);
+}
+
+.tty .said {
+  color: var(--bright);
+}
+
+.tty form {
+  position: relative;
+  display: flex;
+  gap: 1ch;
+}
+
+.tty form:focus-within .ps1 {
+  color: var(--link);
+}
+
+.tty input {
+  flex: 1;
+  min-width: 0;
+  margin: -10px 0;              /* with the padding, a 45px tap target on a 26px row */
+  padding: 10px 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--bright);
+  font: inherit;
+  caret-color: transparent;     /* the block cursor stands in for it */
+  outline: none;                /* focus shows on the "$" */
+}
+
+.tty input::placeholder {
+  color: var(--dim);
+  opacity: 1;
+}
+
+/* the block cursor, placed by prompt.js: hollow in a background tab, solid and blinking otherwise */
+.tty .cursor {
+  position: absolute;
+  top: 50%;
+  width: 1ch;
+  height: 1.2em;
+  transform: translateY(-50%);
+  line-height: 1.2em;
+  color: transparent;
+  box-shadow: inset 0 0 0 1px var(--dim);
+  pointer-events: none;
+}
+
+.tty .cursor.on {
+  box-shadow: none;
+  background: var(--link);
+  color: var(--ground);
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tty .cursor.on {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .tty input {
+    caret-color: auto;
+  }
+
+  .tty .cursor {
+    display: none;
+  }
+}
+
+@media print {
+  :root {
+    --ground: #fff;
+    --text: #000;
+    --bright: #000;
+    --dim: #444;
+    --link: #000;
+  }
+
+  .page {
+    padding: 0;
+  }
+
+  .switch,
+  .tty {
+    display: none;
+  }
+}

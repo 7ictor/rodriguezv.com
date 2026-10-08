@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No manual entry – Victor Rodriguez</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f3f6f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1210" media="(prefers-color-scheme: dark)">
+<script>try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {}</script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+<script src="/theme.js" defer></script>
+</head>
+<body>
+<div class="page">
+<main>
+<h1 class="sr-only">Page not found</h1>
+<button class="switch" type="button" role="switch" aria-checked="false" aria-label="Dark theme" hidden>
+<svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.4"/><path d="M19.25 12a1.35 1.35 0 1 0 2.7 0a1.35 1.35 0 1 0-2.7 0M16.73 18.08a1.35 1.35 0 1 0 2.7 0a1.35 1.35 0 1 0-2.7 0M10.65 20.6a1.35 1.35 0 1 0 2.7 0a1.35 1.35 0 1 0-2.7 0M4.57 18.08a1.35 1.35 0 1 0 2.7 0a1.35 1.35 0 1 0-2.7 0M2.05 12a1.35 1.35 0 1 0 2.7 0a1.35 1.35 0 1 0-2.7 0M4.57 5.92a1.35 1.35 0 1 0 2.7 0a1.35 1.35 0 1 0-2.7 0M10.65 3.4a1.35 1.35 0 1 0 2.7 0a1.35 1.35 0 1 0-2.7 0M16.73 5.92a1.35 1.35 0 1 0 2.7 0a1.35 1.35 0 1 0-2.7 0"/></svg>
+<svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 13.4A8.6 8.6 0 1 1 10.6 3.6a6.7 6.7 0 0 0 9.8 9.8z"/></svg>
+</button>
+
+<p><span class="ps1">$</span> man <span id="asked">this-page</span><br>no manual entry for <span id="missing">this page</span></p>
+
+<section>
+<h2>SEE ALSO</h2>
+<p><a href="/">victor</a> – the home page</p>
+</section>
+</main>
+</div>
+<script>
+const asked = location.pathname.replace(/^\/+|\/+$/g, '');
+if (asked) for (const id of ['asked', 'missing']) document.getElementById(id).textContent = asked;
+</script>
+</body>
+</html>
